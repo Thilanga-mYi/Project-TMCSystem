@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap');
+
+.bg-green-custom-100 {
+    background-color: #c8e6c9;
+}
+
+.header_new_text {
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.seldisable {
+    pointer-events: none;
+    background-color: #DAE0EC;
+}
+
+.custom-file input[type='file'] {
+    display: none;
+}
+
+.coverimg {
+    /* background-image: url('{{ asset('assets_back_end/img/bg/bg.svg') }}'); */
+    background-repeat: no-repeat, no-repeat;
+    background-size: cover;
+}
+
+.theme_font_color {
+    /* background-color: #4caf50; */
+    color: #4caf50;
+}
+
+.theme_bg_color_dark {
+    background-color: #4caf50;
+}
+
+.theme_bg_color_light {
+    background-color: #c5e1a5;
+}
+
+.small_font {
+    font-size: 13px;
+}
+
+.display-heading th {
+    background-color: #c5e1a5;
+    border-top: 3px solid #4caf50;
+    font-weight: 400;
+    font-size: 13px;
+    /* color: #fff; */
+}
+
+
+td {
+    font-size: 13px;
+    /* font-weight: 400; */
+}
+
+.table>:not(:last-child)>:last-child>* {
+    border-bottom-color: #fff;
+}
+
+.dataTables_wrapper.dt-bootstrap4 .table thead tr th.sorting:before {
+    content: '\f0dc';
+    color: #212121;
+    opacity: 1;
+}
+
+.display-heading th:first-child {
+    border-top-left-radius: 0px;
+}
+
+.display-heading th:last-child {
+    border-top-right-radius: 0px;
+}
+
+td {
+    border-bottom: 1px solid #ddd;
+}
+
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+    /* color: #4d6593; */
+    background-color: #fff;
+    border-color: #c9d2e3 #c9d2e3 #ebeef4;
+    border-radius: 0px;
+    border-top: 3px solid #4caf50;
+    color: #212121;
+}
+
+.nav-tabs .nav-link {
+    color: grey;
+    margin-bottom: -1px;
+    background: 0 0;
+    border: 1px solid transparent;
+    border-bottom: 0px solid transparent;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
