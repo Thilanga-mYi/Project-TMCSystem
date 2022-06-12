@@ -468,7 +468,8 @@ class InstallationController extends Controller
             return view('/back_end/reports/invoice')
                 ->with('installation_data', $installation)
                 ->with('features_data', $features)
-                ->with('invoice_data', $invoice);
+                ->with('invoice_data', $invoice)
+                ->with('emp', Employee::find($installation->installed_by_id)->emp_name);
         } else {
             return 2;
         }

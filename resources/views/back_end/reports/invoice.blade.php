@@ -347,12 +347,12 @@
 
                 <tr>
                     <td style="width: 15%">Remark</td>
-                    <td colspan="3"></td>
+                    <td colspan="3">{!! $invoice_data['remark'] !!}</td>
                 </tr>
 
                 <tr>
                     <td style="width: 15%">Installed By</td>
-                    <td colspan="3"></td>
+                    <td colspan="3">{{ $emp }}</td>
                 </tr>
 
 

@@ -14,6 +14,7 @@ class Installation extends Model
         'installation_type',
         'invoice_code',
         'annual_fee',
+        'travelling_fee',
         'warranty_id',
         'payment_type_id',
         'installed_by_id',
