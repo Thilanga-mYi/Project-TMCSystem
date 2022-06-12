@@ -2838,3 +2838,43 @@ edit_product_form.on('submit', function (e) {
 });
 
 // End Product Image Edit
+
+// Start Installation List
+
+var installation_list = $('#installation_list').DataTable({
+    dom: "<'row mb-3'<'col-sm-4'l><'col-sm-8 text-end'<'d-flex justify-content-end'fB>>>t<'d-flex align-items-center'<'me-auto'i><'mb-0'p>>",
+    lengthMenu: [10, 20, 30, 40, 50],
+    responsive: false,
+    pageLength: 20,
+    searching: true,
+    paging: true,
+    buttons: [{
+        extend: 'print',
+        className: 'btn btn-default d-none'
+    },
+    {
+        extend: 'csv',
+        className: 'btn btn-default d-none'
+    }
+    ],
+    ajax: {
+        url: '/admin/installation/list',
+        dataSrc: ''
+    },
+    createdRow: function (row, data, dataIndex, cells) {
+        console.log(data);
+        $(cells).addClass('py-1 align-middle');
+    }
+});
+
+
+// End Installation List
+
+// START INSTALLATION SIM CHANGE
+
+function installation_sim_change() {
+    alert();
+}
+
+// END INSTALLATION SIM CHANGE
+

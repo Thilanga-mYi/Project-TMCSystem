@@ -387,7 +387,7 @@ class InstallationController extends Controller
 
             $riderAssignAction = '<a onclick="print_invoice(' . $value->id . ')" class="dropdown-item font-weight-400 small_font mb-0 border-bottom">' .
                 '<i class="fa fa-file-o pe-3" aria-hidden="true"></i>Print Invoice</a>' .
-                '<a onclick="sim_change(' . $value->id . ')" class="dropdown-item font-weight-400 small_font mb-0 border-bottom">' .
+                '<a onclick="installation_sim_change(' . $value->id . ')" class="dropdown-item font-weight-400 small_font mb-0 border-bottom">' .
                 '<i class="fa fa-exchange pe-3" aria-hidden="true"></i>SIM Change</a>';
 
             $content = '';
@@ -396,39 +396,29 @@ class InstallationController extends Controller
 
             $actions = '<div class="mt-md-0 mt-2">' .
                 '<a href="#" data-bs-toggle="dropdown"class="btn btn-sm btn-default text-decoration-none">' .
-                'Action&nbsp<i class="fa fa-caret-down" aria-hidden="true"></i></a><div class="dropdown-menu bg-white rounded-0 pt-0 pb-0">' .
-                '<a class="dropdown-item font-weight-400 small_font border-bottom" onclick="view_deliver_order_func(' . $value->id . ',true)">' .
+                'Action&nbsp'.
+                '<i class="fa fa-caret-down" aria-hidden="true"></i>'.
+                '</a>'.
+                '<div class="dropdown-menu bg-white rounded-0 pt-0 pb-0">' .
+                '<a class="dropdown-item font-weight-400 small_font border-bottom" onclick="view_installation_func(' . $value->id . ',true)">' .
                 '<i class="fa fa-eye pe-3" aria-hidden="true"></i>' .
                 'View Installation' .
-                '</a>' . $content . '</div></div>';
+                '</a>' . $content . '</div>'.
+                '</div>';
 
             $tableData[] = [
                 ++$key,
-                $actions,
+                $value->invoice_code,
                 $value['getCustomer']->name,
                 $value['getSIM']->imei,
                 $value['getDevice']->imei,
                 $value->vehicle_plate_number,
-                $value->invoice_code,
                 $orderStatus,
-                // $value['getModel']->model_name,
-                // $value->vehicle_modal,
-                // $value->vehicle_milage,
-                // $value->engine_hours_h,
-                // $value->engine_hours_m,
-                // $value->annual_fee,
-                // ($value->travelling_fee != '' ? $value->travelling_fee : '-'),
-                // $value['getWarranty']->title,
-                // $value['getPaymentType']->method,
-                // $value['getInstalledEmp']->emp_name,
-                // ($value->hand_bill_number != '' ? $value->hand_bill_number : '-'),
-                // ($value->admin_numbers != '' ? $value->admin_numbers : '-'),
-                // ($value->admin_in_use != '' ? $value->admin_in_use : '-'),
-                // ($value->job_referance != '' ? $value->job_referance : '-'),
+                $actions
             ];
         }
 
-        return view('/back_end/installation_list', compact('tableData'));
+        return $tableData;
     }
 
     public function printInstallationInvoice(Request $request)

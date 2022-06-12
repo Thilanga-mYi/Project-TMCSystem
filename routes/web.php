@@ -142,12 +142,11 @@ Route::get('/admin/installation/viewInstallationTotal', [InstallationController:
 Route::get('/admin/invoice/PRINT', [InstallationController::class, 'printInstallationInvoice']);
 // Route::get('/admin/invoice/PRINT', [InstallationController::class, 'printInstallationInvoice'])->name('PRINT_INVOICE')->middleware('auth');
 
-// Route::get('/admin/installation/list', [InstallationController::class, 'installationList'])->middleware('auth');
-Route::get('/admin/installationList', [InstallationController::class, 'installationList'])->middleware('auth');
+Route::get('/admin/installation/list', [InstallationController::class, 'installationList'])->middleware('auth');
 
-// Route::get('/admin/installationList', function () {
-//     return view('/back_end/installation_list');
-// });
+Route::get('/admin/installationList', function () {
+    return view('/back_end/installation_list');
+});
 
 Route::get('/admin/re/installation', function () {
     return view('/back_end/installation_re');
@@ -156,6 +155,8 @@ Route::get('/admin/re/installation', function () {
 Route::get('/admin/invoice_list', function () {
     return view('/back_end/invoice_list');
 });
+
+Route::get('admin/installation/lits', [InstallationController::class, 'installationList'])->middleware('auth');
 
 Route::get('/admin/grn_list', function () {
     return view('/back_end/grn_list');
