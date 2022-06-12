@@ -6,6 +6,7 @@ use App\Http\Controllers\GrnController;
 use App\Http\Controllers\GrnTypeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InstallationChangedSimController;
 use App\Http\Controllers\InstallationController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductCategoryController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\VatController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductModelController;
 use App\Http\Controllers\ProductModelForeignController;
+use App\Models\InstallationChangedSim;
 use App\Models\ProductModel;
 use App\Models\warehouses;
 use Illuminate\Support\Facades\Auth;
@@ -143,6 +145,7 @@ Route::get('/admin/invoice/PRINT', [InstallationController::class, 'printInstall
 // Route::get('/admin/invoice/PRINT', [InstallationController::class, 'printInstallationInvoice'])->name('PRINT_INVOICE')->middleware('auth');
 
 Route::get('/admin/installation/list', [InstallationController::class, 'installationList'])->middleware('auth');
+Route::get('/admin/installation/sim-change/view-details', [InstallationController::class, 'viewSelectedInstallation'])->middleware('auth');
 
 Route::get('/admin/installationList', function () {
     return view('/back_end/installation_list');

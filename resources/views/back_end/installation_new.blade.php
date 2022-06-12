@@ -131,7 +131,7 @@
 
                     <div class="card-header d-flex align-items-center rounded-0"
                         style="border-bottom: 3px solid #78909c; background-color: #eeeeee">
-                        {{-- <span class="flex-grow-1 font-weight-600">INSTALLATION TYPE</span> --}}
+                       
                         <div class="d-flex">
 
                             <div class="me-4">

@@ -79,7 +79,6 @@
             margin-left: auto;
             margin-right: 0px;
         }
-
     </style>
 
     <style>
@@ -100,7 +99,6 @@
             min-height: 1.5rem;
             padding-left: 1.5rem;
         }
-
     </style>
 
 </head>
@@ -157,22 +155,25 @@
                 </tr>
 
                 {{-- VEHICLE AND DEVICE DETAILS --}}
-                <tr>
-                    <td colspan="4"><b>VEHICLE DETAILS</b></td>
-                </tr>
-                <tr>
-                    <td style="width:15%">Plate Number</td>
-                    <td>{{ $installation_data['vehicle_plate_number'] }}</td>
-                    <td style="width:15%">Mileage (Km)</td>
-                    <td>{{ $installation_data['vehicle_milage'] }}</td>
-                </tr>
-                <tr>
-                    <td style="width: 15%">Model</td>
-                    <td>{{ $installation_data['vehicle_milage'] }}</td>
-                    <td style="width: 15%">Engine Hours</td>
-                    <td>H : {{ $installation_data['engine_hours_h'] }} M :
-                        {{ $installation_data['engine_hours_m'] }}</td>
-                </tr>
+
+                @if ($installation_data['installation_type'] == 1)
+                    <tr>
+                        <td colspan="4"><b>VEHICLE DETAILS</b></td>
+                    </tr>
+                    <tr>
+                        <td style="width:15%">Plate Number</td>
+                        <td>{{ $installation_data['vehicle_plate_number'] }}</td>
+                        <td style="width:15%">Mileage (Km)</td>
+                        <td>{{ $installation_data['vehicle_milage'] }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%">Model</td>
+                        <td>{{ $installation_data['vehicle_milage'] }}</td>
+                        <td style="width: 15%">Engine Hours</td>
+                        <td>H : {{ $installation_data['engine_hours_h'] }} M :
+                            {{ $installation_data['engine_hours_m'] }}</td>
+                    </tr>
+                @endif
 
                 {{-- SIM / DEVICE DETAILS --}}
                 <tr>

@@ -2867,14 +2867,65 @@ var installation_list = $('#installation_list').DataTable({
     }
 });
 
-
 // End Installation List
 
 // START INSTALLATION SIM CHANGE
 
-function installation_sim_change() {
-    alert();
+var sim_change_modal = $('#sim_change_modal')
+var installation_new_sim = $('#installation_new_sim')
+var installation_new_sim_id = $('#installation_new_sim_id')
+
+var installation_sim_customer_name = $('#installation_sim_customer_name')
+var installation_sim_customer_email = $('#installation_sim_customer_email')
+var installation_sim_vehicle_number = $('#installation_sim_vehicle_number')
+var installation_sim_vehicle_model = $('#installation_sim_vehicle_model')
+var installation_sim_current_sim = $('#installation_sim_current_sim')
+
+function installation_sim_change(id) {
+
+    $.ajax({
+        type: "GET",
+        url: "/admin/installation/sim-change/view-details",
+        data: {
+            id: id,
+        },
+        beforeSend: function () {
+            Notiflix.Loading.Pulse();
+        },
+        success: function (response) {
+            Notiflix.Loading.Remove();
+
+            installation_sim_customer_name.val(response['customer_name']);
+            installation_sim_customer_email.val(response['customer_email']);
+            installation_sim_vehicle_number.val(response['customer_vehicle_number']);
+            installation_sim_vehicle_model.val(response['customer_vehicle_model']);
+            installation_sim_current_sim.val(response['current_sim']);
+
+            sim_change_modal.modal('toggle');
+        }
+    });
+
 }
+
+var installation_SIM_changeTempMap = installation_new_sim.typeahead({
+    source: function (query, process) {
+        return $.get('/admin/product/sim/get/suggetions', {
+            query: query,
+        }, function (data) {
+            data.forEach(element => {
+                installation_SIM_changeTempMap[element['name']] = element['id'];
+            });
+            return process(data);
+        });
+    }
+});
+
+installation_new_sim.change(function (e) {
+    var tempId = installation_SIM_changeTempMap[installation_new_sim.val()];
+    if (tempId != undefined) {
+        installation_new_sim_id.val(tempId);
+    }
+});
 
 // END INSTALLATION SIM CHANGE
 

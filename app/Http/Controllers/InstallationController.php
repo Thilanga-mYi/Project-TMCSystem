@@ -396,15 +396,33 @@ class InstallationController extends Controller
 
             $actions = '<div class="mt-md-0 mt-2">' .
                 '<a href="#" data-bs-toggle="dropdown"class="btn btn-sm btn-default text-decoration-none">' .
-                'Action&nbsp'.
-                '<i class="fa fa-caret-down" aria-hidden="true"></i>'.
-                '</a>'.
+                'Action&nbsp' .
+                '<i class="fa fa-caret-down" aria-hidden="true"></i>' .
+                '</a>' .
                 '<div class="dropdown-menu bg-white rounded-0 pt-0 pb-0">' .
                 '<a class="dropdown-item font-weight-400 small_font border-bottom" onclick="view_installation_func(' . $value->id . ',true)">' .
                 '<i class="fa fa-eye pe-3" aria-hidden="true"></i>' .
                 'View Installation' .
-                '</a>' . $content . '</div>'.
+                '</a>' . $content . '</div>' .
                 '</div>';
+
+            switch ($value->installation_type) {
+                case 1:
+                    $installationTypeText = 'Vehicle';
+                    $installationTypeColor1 = 'primary';
+                    $installationTypeColor2 = 'primary';
+                    break;
+                case 2:
+                    $installationTypeText = 'Device-Only';
+                    $installationTypeColor1 = 'info';
+                    $installationTypeColor2 = 'info';
+                    break;
+            }
+
+            $installationType = '<span class="badge rounded-1 my-1 font-weight-400 bg-' . $installationTypeColor1 . '-transparent-2 text-' . $installationTypeColor2 . ' px-2 pt-5px pb-5px rounded fs-12px d-inline-flex align-items-center">' .
+                '<i class="fa fa-circle text-' . $installationTypeColor2 . '-transparent-8 fs-9px fa-fw me-5px"></i>'
+                . $installationTypeText .
+                '</span>';
 
             $tableData[] = [
                 ++$key,
@@ -412,7 +430,7 @@ class InstallationController extends Controller
                 $value['getCustomer']->name,
                 $value['getSIM']->imei,
                 $value['getDevice']->imei,
-                $value->vehicle_plate_number,
+                $installationType,
                 $orderStatus,
                 $actions
             ];
@@ -454,5 +472,28 @@ class InstallationController extends Controller
         } else {
             return 2;
         }
+    }
+
+    public function viewSelectedInstallation(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|numeric|exists:installations,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->all()]);
+        }
+
+        $installation_obj = (new Installation)->where('id', $request->id)->where('status', 1)->first();
+
+        return [
+            'installation_type' => $installation_obj->installation_type,
+            'customer_name' => Customer::find($installation_obj->customer_id)->name,
+            'customer_email' => Customer::find($installation_obj->customer_id)->email,
+            'customer_vehicle_number' => $installation_obj->vehicle_plate_number,
+            'customer_vehicle_model' => $installation_obj->vehicle_modal,
+            'current_sim' => stockHasProducts::find($installation_obj->sim_card_id)->imei,
+        ];
     }
 }
