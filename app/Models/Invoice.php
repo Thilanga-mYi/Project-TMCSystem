@@ -10,7 +10,22 @@ class Invoice extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['invoice_code', 'order_type_id', 'reference', 'administration_id', 'warehouse_id', 'total', 'discount', 'vat_id', 'net_total', 'remark', 'billing_to', 'billing_address', 'status'];
+    protected $fillable = [
+        'invoice_code',
+        'installation_id',
+        'order_type_id',
+        'reference',
+        'administration_id',
+        'warehouse_id',
+        'total',
+        'discount',
+        'vat_id',
+        'net_total',
+        'remark',
+        'billing_to',
+        'billing_address',
+        'status'
+    ];
 
     public function getInvoiceCount()
     {
@@ -39,7 +54,7 @@ class Invoice extends Model
 
     public function getAdministrationWiseInvoices($user_id)
     {
-        return $this->where('administration_id',$user_id)->get();
+        return $this->where('administration_id', $user_id)->get();
     }
 
     public function getVat()
@@ -54,7 +69,7 @@ class Invoice extends Model
 
     public function getproducts()
     {
-        return $this->hasMany(InvoiceHasProducts::class,'invoice_id','id')->with('getshp');
+        return $this->hasMany(InvoiceHasProducts::class, 'invoice_id', 'id')->with('getshp');
     }
 
     public function viewInvoice($id)
@@ -65,5 +80,4 @@ class Invoice extends Model
             ->with('getproducts')
             ->get();
     }
-
 }

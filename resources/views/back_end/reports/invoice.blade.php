@@ -2,10 +2,14 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Invoice</title>
+
+    <link rel="stylesheet" href="{{ asset('assets_back_end/css/vendor.min.css') }}">
+    <link href="{{ asset('assets_back_end/css/app.min.css') }}" rel="stylesheet" />
 
     <style>
         @page {
@@ -30,33 +34,6 @@
             font-family: 'Segoe UI';
         }
 
-        .text-center {
-            text-align: center;
-        }
-
-        .row {
-            width: 100%;
-            display: flex;
-            flex-wrap: wrap;
-            margin-top: 5px;
-        }
-
-        .col-2 {
-            width: 16.66%;
-        }
-
-        .col-3 {
-            width: 25%;
-        }
-
-        .col-4 {
-            width: 33.33%
-        }
-
-        .col-6 {
-            width: 50%;
-        }
-
         .tborderth {
             border-top: 1px solid #212121;
             padding: 5px;
@@ -74,11 +51,7 @@
         }
 
         .tborder {
-            /* border-left: 1px solid #212121; */
-            /* border-right: 1px solid #212121; */
-            /* border-top: 1px solid #212121; */
             border-bottom: 1px solid #212121;
-            /* padding: 5px; */
             padding-top: 10px;
             padding-bottom: 10px;
             margin: 0px;
@@ -107,171 +80,290 @@
             margin-right: 0px;
         }
 
-        .text-center {
-            text-align: center;
+    </style>
+
+    <style>
+        .ui_kit_checkbox.selectable-list {
+            -webkit-columns: 3;
+        }
+
+        ul,
+        ol {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .custom-control {
+            position: relative;
+            display: block;
+            min-height: 1.5rem;
+            padding-left: 1.5rem;
         }
 
     </style>
 
 </head>
 
-<body class="font">
+<body class="bg-white">
 
-    <div class="text-center">
-        <h3>{{ '' }}</h3>
-        <span>{{ '' }}</span>
-        <br>
-        <span>{{ '' }}</span>
-        <hr style="color: #eee; border:1px solid #eee">
-    </div>
+    <div class="container">
 
-    <br>
-
-    <div style="padding: 0px">
-
-        <div class="row">
-            <div class="col-5">
-                <table class="table-border"
-                    style="border-spacing: 0; border-width: 0; padding: 0; border-width: 0; width:100%">
-
-                    <tr>
-                        <td class="tborderth tborder tbleft bold-100"><b>Invoice Date</b></td>
-                        <td class="tborderth tborder tbleft bold-100">&nbsp;</td>
-                        <td class="tborderth tborder tbright bold-100">{{ date('d-m-Y', strtotime('2022-04-30')) }}
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="tborderth tborder tbleft bold-100"><b>Invoice #</b></td>
-                        <td class="tborderth tborder tbleft bold-100">&nbsp;</td>
-                        <td class="tborderth tborder tbright bold-100">{{ 'INV150' }}</td>
-                    </tr>
-
-                    <tr>
-                        <td class="tborderth tborder tbleft bold-100"><b>Reference #</b></td>
-                        <td class="tborderth tborder tbleft bold-100">&nbsp;</td>
-                        <td class="tborderth tborder tbright bold-100">{{ 'REF1550' }}</td>
-                    </tr>
-
-                </table>
+        <div class="d-flex justify-content-center mb-5">
+            <div class="text-center">
+                <div class="mt-3">
+                    <h3>TRACK MY CAR</h3>
+                    <span>
+                        NO. 29/B Athurugiriya road, Kottawa, Sri Lanka.
+                    </span>
+                    <br>
+                    <span>0777 544 858</span>
+                </div>
             </div>
-
-            <div class="col-5" style="margin-left: auto; margin-right: 0px;">
-                <table class="table-border"
-                    style="border-spacing: 0; border-width: 0; padding: 0; border-width: 0; width:100%">
-
-                    <tr>
-                        <td class="tborderth tborder tbleft bold-100"><b>Billing To</b></td>
-                        <td class="tborderth tborder tbleft bold-100">&nbsp;</td>
-                        <td class="tborderth tborder tbright bold-100">{{ 'Sonal Lasintha' }}</td>
-                    </tr>
-
-                    <tr>
-                        <td class="tborderth tborder tbleft bold-100"><b>Billing Address</b></td>
-                        <td class="tborderth tborder tbleft bold-100">&nbsp;</td>
-                        <td class="tborderth tborder tbright bold-100">{{ '22 M.E Cooray Mawatha Waddduwa' }}</td>
-                    </tr>
-
-                    <tr>
-                        <td class="tborderth tborder tbleft bold-100"><b>Auth Person</b></td>
-                        <td class="tborderth tborder tbleft bold-100">&nbsp;</td>
-                        <td class="tborderth tborder tbright bold-100">{{ Auth::user()->name }}</td>
-                    </tr>
-
-                </table>
-            </div>
-
         </div>
 
-        <br>
-        <br>
+        <div class="table-responsive">
+            <table class="table table-bordered">
 
-        <div>
-            <table class="table-border"
-                style="border-spacing: 0; border-width: 0; padding: 0; border-width: 0; width:100%">
-                <thead>
-                    <tr class="trcolor">
-                        <th class="tborderth tborder tbleft bold-100" style="text-align: left">#</th>
-                        <th class="tborderth tborder tbleft bold-100" style="text-align: left">Product Code</th>
-                        <th class="tborderth tborder tbleft bold-100" style="text-align: left">Product Name</th>
-                        <th class="tborderth tborder tbleft bold-100" style="text-align: right">Qty</th>
-                        <th class="tborderth tborder tbleft bold-100" style="text-align: right">&nbsp;Unit Price</th>
-                        <th class="tborderth tborder tbleft tbright bold-100" style="text-align: right">Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
+                <tr>
+                    <td colspan="4" class="text-center">
+                        <b>NEW INSTALLATION</b>
+                        {{-- <b>RE INSTALLATION</b> --}}
+                    </td>
+                </tr>
 
-                </tbody>
+                {{-- CUSTOMER DETAILS 1 --}}
+                <tr>
+                    <td style="width: 15%">Name</td>
+                    <td>{{ $installation_data['getCustomer']['name'] }}</td>
+                    <td style="width: 15%">Date</td>
+                    <td>{{ $installation_data['created_at'] }}</td>
+                </tr>
+                {{-- CUSTOMER DETAILS 2 --}}
+                <tr>
+                    <td style="width: 15%">Contact</td>
+                    <td>{{ $installation_data['getCustomer']['tel1'] }}</td>
+                    <td style="width: 15%">Address</td>
+                    <td>{{ $installation_data['getCustomer']['street_address'] }}
+                    </td>
+                </tr>
+
+                {{-- CUSTOMER ADDRESS DETAILS --}}
+                <tr>
+                    <td style="width: 15%">Location</td>
+                    <td>{{ $installation_data['getCustomer']['city'] }}</td>
+                    <td style="width: 15%">NIC / P.N</td>
+                    <td>{{ $installation_data['getCustomer']['nic_or_passport'] }}</td>
+                </tr>
+
+                {{-- VEHICLE AND DEVICE DETAILS --}}
+                <tr>
+                    <td colspan="4"><b>VEHICLE DETAILS</b></td>
+                </tr>
+                <tr>
+                    <td style="width:15%">Plate Number</td>
+                    <td>{{ $installation_data['vehicle_plate_number'] }}</td>
+                    <td style="width:15%">Mileage (Km)</td>
+                    <td>{{ $installation_data['vehicle_milage'] }}</td>
+                </tr>
+                <tr>
+                    <td style="width: 15%">Model</td>
+                    <td>{{ $installation_data['vehicle_milage'] }}</td>
+                    <td style="width: 15%">Engine Hours</td>
+                    <td>H : {{ $installation_data['engine_hours_h'] }} M :
+                        {{ $installation_data['engine_hours_m'] }}</td>
+                </tr>
+
+                {{-- SIM / DEVICE DETAILS --}}
+                <tr>
+                    <td colspan="4"><b>DEVICE DETAILS</b></td>
+                </tr>
+                <tr>
+                    <td style="width: 15%">SIM Number</td>
+                    <td colspan="3">{{ $installation_data['getSIM']['imei'] }}</td>
+                </tr>
+                <tr>
+                    <td style="width: 15%">IMEI or ID</td>
+                    <td>{{ $installation_data['getDevice']['imei'] }}</td>
+                    <td style="width: 15%">Device Model</td>
+                    <td>{{ $installation_data['getDevice']['getProduct']['getProductModel']['model_name'] }}</td>
+                </tr>
+
+                {{-- FUNCTIONS --}}
+                <tr>
+                    <td style="width: 15%">Functions</td>
+                    <td colspan="3">
+                        <ul class="ui_kit_checkbox selectable-list">
+
+                            @foreach ($features_data as $feature)
+                                <li>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" value="{{ $feature['getFeature']['id'] }}"
+                                            class="custom-control-input me-2" name="funtion_checkbox" checked>
+                                        <label class="custom-control-label" for="customCheck1">
+                                            {{ $feature['getFeature']['name'] }}
+                                        </label>
+                                    </div>
+                                </li>
+                            @endforeach
+
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+
+                </tr>
+
+                <tr>
+                    <td colspan="4">
+                        <b>ADMIN NUMBER</b>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="width: 15%">In Use Status</td>
+                    <td>
+                        <div class="d-flex justify-content-between">
+
+                            @if ($installation_data['admin_in_use'] == 'yes')
+                                <div>
+                                    <input type="checkbox" value="1" class="custom-control-input me-2"
+                                        name="funtion_checkbox" checked>
+                                    <label class="custom-control-label" for="customCheck1">
+                                        Yes
+                                    </label>
+                                </div>
+
+                                <div>
+                                    <input type="checkbox" value="1" class="custom-control-input me-2"
+                                        name="funtion_checkbox">
+                                    <label class="custom-control-label" for="customCheck1">
+                                        No
+                                    </label>
+                                </div>
+                            @else
+                                <div>
+                                    <input type="checkbox" value="1" class="custom-control-input me-2"
+                                        name="funtion_checkbox" checked>
+                                    <label class="custom-control-label" for="customCheck1">
+                                        Yes
+                                    </label>
+                                </div>
+
+
+                                <div>
+                                    <input type="checkbox" value="1" class="custom-control-input me-2"
+                                        name="funtion_checkbox">
+                                    <label class="custom-control-label" for="customCheck1" checked>
+                                        No
+                                    </label>
+                                </div>
+                            @endif
+                        </div>
+                    </td>
+                    <td style="width: 15%">Admin Number</td>
+                    <td>{{ $installation_data['admin_numbers'] }}</td>
+                </tr>
+
+                <tr>
+                    <td colspan="4"><b>PAYMENT DETAILS</b></td>
+                </tr>
+
+                <tr>
+                    <td style="width: 15%">Invoice No</td>
+                    <td>{{ $invoice_data['invoice_code'] }}</td>
+                    <td style="width: 15%">Payment Method</td>
+                    <td>{{ $installation_data['getPaymentType']['method'] }}</td>
+                </tr>
+
+                <tr>
+                    <td style="width: 15%">Travelling Fee (LKR)</td>
+                    <td class="text-left">{{ $installation_data['travelling_fee'] }}</td>
+                    <td style="width: 15%">Annual Fee (LKR)</td>
+                    <td class="">{{ $installation_data['annual_fee'] }}</td>
+                </tr>
+
+                <tr>
+                    <td style="width: 15%">Warrenty Period</td>
+                    <td class="text-left">{{ $installation_data['getWarranty']['title'] }}</td>
+                    <td style="width: 15%">Invoice Amount (LKR)</td>
+                    <td class="pull-right">{{ $invoice_data['total'] }}</td>
+                </tr>
+
+                <tr>
+                    <td colspan="4"><b>OTHER DETAILS</b></td>
+                </tr>
+
+                <tr>
+                    <td colspan="4">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <input type="checkbox" value="1" class="custom-control-input me-2"
+                                    name="funtion_checkbox">
+                                <label class="custom-control-label" for="customCheck1">
+                                    FB
+                                </label>
+                            </div>
+                            <div>
+                                <input type="checkbox" value="1" class="custom-control-input me-2"
+                                    name="funtion_checkbox">
+                                <label class="custom-control-label" for="customCheck1">
+                                    Ikman.lk
+                                </label>
+                            </div>
+                            <div>
+                                <input type="checkbox" value="1" class="custom-control-input me-2"
+                                    name="funtion_checkbox">
+                                <label class="custom-control-label" for="customCheck1">
+                                    Recommendation
+                                </label>
+                            </div>
+                            <div>
+                                <input type="checkbox" value="1" class="custom-control-input me-2"
+                                    name="funtion_checkbox">
+                                <label class="custom-control-label" for="customCheck1">
+                                    Old Customer
+                                </label>
+                            </div>
+                            <div>
+                                <input type="checkbox" value="1" class="custom-control-input me-2"
+                                    name="funtion_checkbox">
+                                <label class="custom-control-label" for="customCheck1">
+                                    Goolge
+                                </label>
+                            </div>
+                            <div>
+                                <input type="checkbox" value="1" class="custom-control-input me-2"
+                                    name="funtion_checkbox">
+                                <label class="custom-control-label" for="customCheck1">
+                                    Shop Board
+                                </label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="width: 15%">Remark</td>
+                    <td colspan="3"></td>
+                </tr>
+
+                <tr>
+                    <td style="width: 15%">Installed By</td>
+                    <td colspan="3"></td>
+                </tr>
+
+
+
             </table>
-
         </div>
 
     </div>
-    <br>
 
-    <div>
-
-        <div class="row">
-            <table style="margin-left: auto; margin-right: 0;">
-                <tr class="smargin">
-                    <td class="smargin"><b>Gross Total (LKR)</b></td>
-                    <td>&nbsp;</td>
-                    <td style="text-align: right">
-                        LKR. 1,500.00
-                    </td>
-                </tr>
-                {{-- <tr class="smargin">
-                    <td class="smargin"><b>Tot Discount (%)</b></td>
-                    <td>&nbsp;</td>
-                    <td style="text-align: right">
-                        @if ($data['invoicedetails']['invoice_discount'] == '')
-                            0
-                        @else
-                            {{ $data['invoicedetails']['invoice_discount'] }}
-                        @endif
-                    </td>
-                </tr> --}}
-                <tr class="smargin">
-                    <td class="smargin"><b>Tot VAT (%)</b></td>
-                    <td>&nbsp;</td>
-                    <td style="text-align: right; ">
-                        LKR. 0.00
-                    </td>
-                </tr>
-                <tr class="smargin">
-                    <td class="smargin"><b>Net Total (LKR)</b></td>
-                    <td>&nbsp;</td>
-                    <td style="text-align: right; ">
-                        LKR. 1,500.00
-                    </td>
-                </tr>
-
-
-            </table>
-        </div>
-    </div>
-
-    <div style="margin-top: 50px">
-        <p style="text-align: justify"><strong>Remark : </strong>
-
-        </p>
-    </div>
-
-    <div class="row" style="margin-top: 70px">
-        <div class="col-4">
-            <div style="margin-right: auto; margin-left: 0px;" class="text-center">
-                <span>..............................................</span><br><span><i>Prepared by</i></span>
-            </div>
-        </div>
-        <div class="col-4 text-center text-align-right">
-            <span>..............................................</span>
-            <br>
-            <span>
-                <i>Approved
-                    by</i>
-            </span>
-        </div>
-    </div>
+    <script type="text/javascript">
+        window.print();
+    </script>
 
 </body>
 

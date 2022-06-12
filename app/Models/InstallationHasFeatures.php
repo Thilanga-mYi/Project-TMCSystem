@@ -25,4 +25,9 @@ class InstallationHasFeatures extends Model
     {
         return $this->where($key, $term)->update($data);
     }
+
+    public function getFeature()
+    {
+        return $this->hasOne(ProductFeatures::class, 'id', 'feature_id');
+    }
 }

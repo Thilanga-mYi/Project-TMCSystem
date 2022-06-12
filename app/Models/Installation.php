@@ -59,32 +59,39 @@ class Installation extends Model
 
     public function getSIM()
     {
-        return $this->hasOne(Products::class,'id','sim_card_id');
+        return $this->hasOne(stockHasProducts::class, 'id', 'sim_card_id')
+            ->with('getProduct');
     }
 
     public function getDevice()
     {
-        return $this->hasOne(Products::class,'id','product_id');
+        return $this->hasOne(stockHasProducts::class, 'id', 'product_id')
+            ->with('getProduct');
     }
 
     public function getModel()
     {
-       return $this->hasOne(ProductModel::class,'id','device_model_id');
+        return $this->hasOne(ProductModel::class, 'id', 'device_model_id');
     }
 
     public function getWarranty()
     {
-        return $this->hasOne(warranty::class,'id','warranty_id');
+        return $this->hasOne(warranty::class, 'id', 'warranty_id');
     }
 
     public function getPaymentType()
     {
-        return $this->hasOne(payment_methods::class,'id','payment_type_id');
+        return $this->hasOne(payment_methods::class, 'id', 'payment_type_id');
     }
 
     public function getInstalledEmp()
     {
-        return $this->hasOne(Employee::class,'id','installed_by_id');
+        return $this->hasOne(Employee::class, 'id', 'installed_by_id');
+    }
+
+    public function getDeviceModel()
+    {
+        return $this->hasOne(ProductModel::class, 'id', 'device_model_id');
     }
 
     public function getallInstallations()

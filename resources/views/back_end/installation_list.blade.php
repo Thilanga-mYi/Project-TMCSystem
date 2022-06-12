@@ -1,7 +1,6 @@
 @extends('back_end.layout.app')
 
 @section('content')
-
     <div id="content" class="app-content">
 
         <div class="d-flex align-items-center mb-3">
@@ -41,100 +40,34 @@
 
                         <div class="table-responsive table-stripped">
 
-                            <table id="installation_list" class="table table-striped text-nowrap w-100">
+                            <table id="installation_list" class="table table-borderless table-striped text-nowrap w-100">
                                 <thead class="display-heading" style="background-color: #e0e0e0">
                                     <tr>
                                         <th>#</th>
                                         <th>Action</th>
                                         <th>Customer Name</th>
-                                        <th>SIM Number</th>
+                                        <th>SIM</th>
                                         <th>Device IMEI</th>
-                                        <th>Device Model</th>
                                         <th>Vehicle Plate</th>
-                                        <th>Vehicle Model</th>
-                                        <th>Vehicle Milage</th>
-                                        <th>Engine Hours (h)</th>
-                                        <th>Engine Hours (m)</th>
                                         <th>Invoice Code</th>
-                                        <th>Annual Fee</th>
-                                        <th>Travelling Fee</th>
-                                        <th>Warranty</th>
-                                        <th>Payment Method</th>
-                                        <th>Installed By</th>
-                                        <th>Hand Bill Number</th>
-                                        <th>Admin Number In Use</th>
-                                        <th>Admin Number</th>
-                                        <th>Job Referance</th>
                                         <th>Status</th>
                                     </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <input id="installation_list_customer_name" type="text" class="form-control"
-                                                style="width: 200px">
-                                        </td>
-                                        <td>
-                                            <input id="installation_list_sim_number" type="number" class="form-control"
-                                                style="width: 150px">
-                                        </td>
-                                        <td>
-                                            <input id="installation_list_device_imei" type="text" class="form-control"
-                                                style="width: 150px">
-                                        </td>
-                                        <td>
-                                            <select id="installation_list_device_model" class="form-select"
-                                                style="width: 150px">
-                                                <option>Abc</option>
-                                                <option>Def</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input id="installation_list_vehicle_plate" type="text" class="form-control"
-                                                style="width: 100px">
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <input id="installation_list_invoice_code" type="text" class="form-control"
-                                                style="width: 150px">
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <select id="installation_list_payment_type" class="form-select">
-                                                <option>Cash</option>
-                                                <option>Card</option>
-                                                <option>Cheque</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select id="installation_list_installed_by" class="form-select"
-                                                style="width: 150px">
-                                                <option>Emp 1</option>
-                                                <option>Emp 2</option>
-                                                <option>Emp 3</option>
-                                            </select>
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
                                     </tr>
                                 </thead>
 
                                 <tbody>
 
                                     @foreach ($tableData as $key => $value)
-
                                         <tr>
-                                            <td class="align-middle">{{ $value[0] }}</td>
-                                            <td class="align-middle">{!!$value[20] !!}</td>
-                                            <td class="align-middle">{{ $value[1] }}</td>
+                                            <td>{{ $value[0] }}</td>
+                                            <td>{!! $value[1] !!}</td>
+                                            <td>{{ $value[2] }}</td>
+                                            <td>{{ $value[3] }}</td>
+                                            <td>{{ $value[4] }}</td>
+                                            <td>{{ $value[5] }}</td>
+                                            <td>{{ $value[6] }}</td>
+                                            <td>{!! $value[7] !!}</td>
+                                            {{-- <td class="align-middle">{{ $value[1] }}</td>
                                             <td class="align-middle">{{ $value[2] }}</td>
                                             <td class="align-middle">{{ $value[3] }}</td>
                                             <td class="align-middle">{{ $value[4] }}</td>
@@ -152,10 +85,8 @@
                                             <td class="align-middle">{{ $value[16] }}</td>
                                             <td class="align-middle">{{ $value[17] }}</td>
                                             <td class="align-middle">{{ $value[18] }}</td>
-                                            <td class="align-middle">{{ $value[19] }}</td>
-                                            <td class="align-middle">{!! $value[21] !!}</td>
+                                            <td class="align-middle">{{ $value[19] }}</td> --}}
                                         </tr>
-
                                     @endforeach
 
                                 </tbody>
@@ -188,9 +119,9 @@
                 <div class="modal-body">
 
                     <div class="row">
-                        
+
                     </div>
-                    
+
                 </div>
 
                 <div class="card-footer">
@@ -204,6 +135,4 @@
             </div>
         </div>
     </div>
-
-
 @endsection

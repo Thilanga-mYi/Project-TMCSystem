@@ -139,6 +139,9 @@ Route::post('/admin/installation/vehicle_images', [InstallationController::class
 Route::post('/admin/installation/nic_images', [InstallationController::class, 'saveNICImages'])->middleware('auth');
 Route::get('/admin/installation/viewInstallationTotal', [InstallationController::class, 'viewInstallationTotal'])->middleware('auth');
 
+Route::get('/admin/invoice/PRINT', [InstallationController::class, 'printInstallationInvoice']);
+// Route::get('/admin/invoice/PRINT', [InstallationController::class, 'printInstallationInvoice'])->name('PRINT_INVOICE')->middleware('auth');
+
 // Route::get('/admin/installation/list', [InstallationController::class, 'installationList'])->middleware('auth');
 Route::get('/admin/installationList', [InstallationController::class, 'installationList'])->middleware('auth');
 
@@ -161,8 +164,6 @@ Route::get('/admin/grn_list', function () {
 Route::get('/admin/online_orders', function () {
     return view('/back_end/online_orders');
 });
-
-
 
 Route::get('/invoice', function () {
     return view('/back_end/reports/invoice');

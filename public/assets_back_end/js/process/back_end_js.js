@@ -2606,6 +2606,9 @@ installationUpload_btn.click(function (e) {
                                     Notiflix.Notify.Failure(response['des']);
                                 } else if (response['type'] == 'success') {
                                     Notiflix.Notify.Success(response['des']);
+                                    print_invoice(response['data']);
+                                    location.reload();
+
                                 }
 
                             } else {
@@ -2622,6 +2625,32 @@ installationUpload_btn.click(function (e) {
     }, function () { });
 
 });
+
+
+// START PRINT INVOICE
+
+function print_invoice(id) {
+
+    $.ajax({
+        type: "GET",
+        url: "/admin/invoice/PRINT",
+        data: { id: id },
+        success: function (response) {
+
+            Notiflix.Loading.Remove();
+
+            if (response == 2) {
+                Notiflix.Notify.Warning('Something Wrong.');
+            } else {
+                printReport(response);
+            }
+
+        }
+    });
+}
+
+// END PRINT INVOICE
+
 
 function vehicleImageUpload() {
 

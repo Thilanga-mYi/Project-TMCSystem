@@ -259,6 +259,7 @@ class InstallationController extends Controller
 
         $invoice_data = [
             'invoice_code' => 'NWINST/' . date('smy') . '/' . str_pad((new Invoice)->getInvoiceCount() + 1, 3, '0', STR_PAD_LEFT),
+            'installation_id' => $installationObj->id,
             'order_type_id' => 1,
             'referance' => $hand_bill_number,
             'administration_id' => Auth::user()->id,
@@ -325,6 +326,7 @@ class InstallationController extends Controller
             'code' => 1,
             'type' => 'success',
             'des' => 'Successfully Saved Installation',
+            'data' => $installationObj->id,
             'refresh_status' => 1,
             'feild_reset_status' => 1,
         ]);
@@ -383,12 +385,10 @@ class InstallationController extends Controller
                 . $orderTypeText .
                 '</span>';
 
-            $riderAssignAction = '<a onclick="assign_a_rider(' . $value->id . ',2)" class="dropdown-item font-weight-400 small_font mb-0 border-bottom">' .
-                '<i class="fa fa-random pe-3" aria-hidden="true"></i>Re Installation</a>' .
+            $riderAssignAction = '<a onclick="print_invoice(' . $value->id . ')" class="dropdown-item font-weight-400 small_font mb-0 border-bottom">' .
+                '<i class="fa fa-file-o pe-3" aria-hidden="true"></i>Print Invoice</a>' .
                 '<a onclick="sim_change(' . $value->id . ')" class="dropdown-item font-weight-400 small_font mb-0 border-bottom">' .
-                '<i class="fa fa-exchange pe-3" aria-hidden="true"></i>SIM Change</a>' .
-                '<a onclick="assign_a_rider(' . $value->id . ',2)" class="dropdown-item font-weight-400 small_font mb-0 border-bottom">' .
-                '<i class="fa fa-lastfm pe-3" aria-hidden="true"></i>Software Install</a>';
+                '<i class="fa fa-exchange pe-3" aria-hidden="true"></i>SIM Change</a>';
 
             $content = '';
 
@@ -404,33 +404,65 @@ class InstallationController extends Controller
 
             $tableData[] = [
                 ++$key,
-                $value['getCustomer']->name,
-                $value['getSIM']->lang1_name,
-                $value['getDevice']->code,
-                $value['getModel']->model_name,
-                $value->vehicle_plate_number,
-                $value->vehicle_modal,
-                $value->vehicle_milage,
-                $value->engine_hours_h,
-                $value->engine_hours_m,
-                $value->invoice_code,
-                $value->annual_fee,
-                ($value->travelling_fee != '' ? $value->travelling_fee : '-'),
-                $value['getWarranty']->title,
-                $value['getPaymentType']->method,
-                $value['getInstalledEmp']->emp_name,
-                ($value->hand_bill_number != '' ? $value->hand_bill_number : '-'),
-                ($value->admin_numbers != '' ? $value->admin_numbers : '-'),
-                ($value->admin_in_use != '' ? $value->admin_in_use : '-'),
-                ($value->job_referance != '' ? $value->job_referance : '-'),
                 $actions,
+                $value['getCustomer']->name,
+                $value['getSIM']->imei,
+                $value['getDevice']->imei,
+                $value->vehicle_plate_number,
+                $value->invoice_code,
                 $orderStatus,
+                // $value['getModel']->model_name,
+                // $value->vehicle_modal,
+                // $value->vehicle_milage,
+                // $value->engine_hours_h,
+                // $value->engine_hours_m,
+                // $value->annual_fee,
+                // ($value->travelling_fee != '' ? $value->travelling_fee : '-'),
+                // $value['getWarranty']->title,
+                // $value['getPaymentType']->method,
+                // $value['getInstalledEmp']->emp_name,
+                // ($value->hand_bill_number != '' ? $value->hand_bill_number : '-'),
+                // ($value->admin_numbers != '' ? $value->admin_numbers : '-'),
+                // ($value->admin_in_use != '' ? $value->admin_in_use : '-'),
+                // ($value->job_referance != '' ? $value->job_referance : '-'),
             ];
         }
 
         return view('/back_end/installation_list', compact('tableData'));
+    }
 
-        
+    public function printInstallationInvoice(Request $request)
+    {
 
+        // $request->validate([
+        //     'id' => 'required|numeric|exists:installations,id'
+        // ]);
+
+        $installation = (new Installation)
+            ->where('id', $request->id)
+            ->with('getCustomer')
+            ->with('getSIM')
+            ->with('getDevice')
+            ->with('getWarranty')
+            ->with('getPaymentType')
+            ->with('getDeviceModel')
+            ->with('getInstalledEmp')
+            ->first();
+
+        $features = (new InstallationHasFeatures)
+            ->where('installation_id', $request->id)
+            ->with('getFeature')
+            ->get();
+
+        $invoice = (new Invoice)->where('installation_id', $request->id)->first();
+
+        if (!empty($installation)) {
+            return view('/back_end/reports/invoice')
+                ->with('installation_data', $installation)
+                ->with('features_data', $features)
+                ->with('invoice_data', $invoice);
+        } else {
+            return 2;
+        }
     }
 }
