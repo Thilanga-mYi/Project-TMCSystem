@@ -45,10 +45,22 @@ class InstallationController extends Controller
     {
         $data = array();
 
-        foreach ((new stockHasProducts)->getProductSuggetions($request->all()) as $product) {
+        $records = DB::table('stock_has_products')
+            ->where([
+                ['stock_has_products.status', '=', 1],
+                ["stock_has_products.imei", "LIKE", "%{$request['query']}%"],
+            ])
+            ->rightJoin('products', 'stock_has_products.product_id', 'products.id')
+            ->where(function ($query) {
+                $query->where('products.product_type_id', '2');
+            })
+            ->get(['products.id as product_id', 'products.lang1_name', 'stock_has_products.imei']);
+
+        foreach ($records as $product) {
+
             $data[] = [
-                'id' => $product->id,
-                'name' => $product->imei . ' (' . Products::find($product->product_id)->lang1_name . ')',
+                'id' => $product->product_id,
+                'name' => $product->imei . ' (' . $product->lang1_name . ')',
             ];
         }
         return response()->json($data, 200);
@@ -56,12 +68,25 @@ class InstallationController extends Controller
 
     public function getProductSuggestions(Request $request)
     {
+
         $data = array();
 
-        foreach ((new stockHasProducts)->getProductSuggetions($request->all()) as $product) {
+        $records = DB::table('stock_has_products')
+            ->where([
+                ['stock_has_products.status', '=', 1],
+                ["stock_has_products.imei", "LIKE", "%{$request['query']}%"],
+            ])
+            ->rightJoin('products', 'stock_has_products.product_id', 'products.id')
+            ->where(function ($query) {
+                $query->where('products.product_type_id', '1');
+            })
+            ->get(['products.id as product_id', 'products.lang1_name', 'stock_has_products.imei']);
+
+        foreach ($records as $product) {
+
             $data[] = [
-                'id' => $product->id,
-                'name' => $product->imei . ' (' . Products::find($product->product_id)->lang1_name . ')',
+                'id' => $product->product_id,
+                'name' => $product->imei . ' (' . $product->lang1_name . ')',
             ];
         }
         return response()->json($data, 200);
