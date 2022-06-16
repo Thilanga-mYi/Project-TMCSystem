@@ -109,7 +109,8 @@
 
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label class="form-label small_font" for="installation_sim_vehicle_number">
+                                    <label class="form-label small_font" id="installation_sim_vehicle_number_lbl"
+                                        for="installation_sim_vehicle_number">
                                         Vehicle Number
                                     </label>
                                     <input id="installation_sim_vehicle_number" name="installation_sim_vehicle_number"
@@ -119,7 +120,8 @@
 
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label class="form-label small_font" for="installation_sim_vehicle_model">
+                                    <label class="form-label small_font" id="installation_sim_vehicle_model_lbl"
+                                        for="installation_sim_vehicle_model">
                                         Vehicle Model
                                     </label>
                                     <input id="installation_sim_vehicle_model" name="installation_sim_vehicle_model"
@@ -166,8 +168,8 @@
                                     <label class="form-label small_font" for="installation_sim_additional_amount">
                                         Additional Amount
                                     </label>
-                                    <input id="installation_sim_additional_amount" name="installation_sim_additional_amount" type="number"
-                                        class="form-control" />
+                                    <input id="installation_sim_additional_amount" name="installation_sim_additional_amount"
+                                        type="number" class="form-control" />
                                 </div>
                             </div>
 
@@ -211,4 +213,195 @@
         </div>
     </div>
 
+    @include('back_end.layout.script')
+
+    <script>
+        var installation_datatable_list = $('#installation_datatable_list').DataTable({
+            dom: "<'row mb-3'<'col-sm-4'l><'col-sm-8 text-end'<'d-flex justify-content-end'fB>>>t<'d-flex align-items-center'<'me-auto'i><'mb-0'p>>",
+            lengthMenu: [10, 20, 30, 40, 50],
+            responsive: true,
+            pageLength: 20,
+            buttons: [{
+                    extend: 'print',
+                    className: 'btn btn-default d-none '
+                },
+                {
+                    extend: 'csv',
+                    className: 'btn btn-default d-none'
+                }
+            ],
+            ajax: {
+                url: '/admin/installation/list',
+                dataSrc: ''
+            },
+            createdRow: function(row, data, dataIndex, cells) {
+                $(cells).addClass('py-1 align-middle');
+            }
+        });
+
+        var sim_change_modal = $('#sim_change_modal');
+
+        function sim_change(id) {
+            // alert('Installation Id ' + id);
+            sim_change_modal.modal('toggle');
+        }
+
+        // START PRODUCT IMAGE EDIT
+
+        function product_image_edit(id) {
+            window.location.href = '/admin/product/get/advanceEditView?product_id=' + id + '';
+        }
+
+        var edit_product_form = $('#edit_product_form');
+        var edit_product_des = $('#edit_product_des');
+
+        edit_product_form.on('submit', function(e) {
+            e.preventDefault();
+
+            Notiflix.Confirm.Show('Product Save Confirmation', 'Please confirm to edit this product?', 'Confirm',
+                'Ignore',
+                function() {
+
+                    var formData = new FormData(edit_product_form[0]);
+
+                    $.ajax({
+                        url: "/admin/product/save/advanceEditSave",
+                        method: "POST",
+                        data: formData,
+                        dataType: 'JSON',
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        beforeSend: function() {
+                            Notiflix.Loading.Pulse();
+                        },
+                        success: function(response) {
+                            Notiflix.Loading.Remove();
+
+                            if ($.isEmptyObject(response.error)) {
+                                if (response['type'] == 'error') {
+                                    Notiflix.Notify.Failure(response['des']);
+                                } else if (response['type'] == 'success') {
+                                    Notiflix.Notify.Success(response['des']);
+                                    window.location.href = '/admin/product_list';
+                                }
+                            } else {
+                                $.each(response.error, function(key, value) {
+                                    Notiflix.Notify.Failure(value);
+                                });
+                            }
+                        }
+                    });
+
+                },
+                function() {});
+        });
+
+        // END PRODUCT IMAGE EDIT
+
+        // START INSTALLATION LIST
+
+        var installation_list = $('#installation_list').DataTable({
+            dom: "<'row mb-3'<'col-sm-4'l><'col-sm-8 text-end'<'d-flex justify-content-end'fB>>>t<'d-flex align-items-center'<'me-auto'i><'mb-0'p>>",
+            lengthMenu: [10, 20, 30, 40, 50],
+            responsive: false,
+            pageLength: 20,
+            searching: true,
+            paging: true,
+            buttons: [{
+                    extend: 'print',
+                    className: 'btn btn-default d-none'
+                },
+                {
+                    extend: 'csv',
+                    className: 'btn btn-default d-none'
+                }
+            ],
+            ajax: {
+                url: '/admin/installation/list',
+                dataSrc: ''
+            },
+            createdRow: function(row, data, dataIndex, cells) {
+                $(cells).addClass('py-1 align-middle');
+            }
+        });
+
+        // END INSTALLATION LIST
+
+        // START INSTALLATION SIM CHANGE
+
+        var sim_change_modal = $('#sim_change_modal')
+        var installation_new_sim = $('#installation_new_sim')
+        var installation_new_sim_id = $('#installation_new_sim_id')
+
+        var installation_sim_customer_name = $('#installation_sim_customer_name')
+        var installation_sim_customer_email = $('#installation_sim_customer_email')
+        var installation_sim_vehicle_number = $('#installation_sim_vehicle_number')
+        var installation_sim_vehicle_model = $('#installation_sim_vehicle_model')
+        var installation_sim_current_sim = $('#installation_sim_current_sim')
+        var installation_sim_vehicle_number_lbl = $('#installation_sim_vehicle_number_lbl')
+        var installation_sim_vehicle_model_lbl = $('#installation_sim_vehicle_model_lbl')
+
+        function installation_sim_change(id) {
+
+            $.ajax({
+                type: "GET",
+                url: "/admin/installation/sim-change/view-details",
+                data: {
+                    id: id,
+                },
+                beforeSend: function() {
+                    Notiflix.Loading.Pulse();
+                },
+                success: function(response) {
+                    Notiflix.Loading.Remove();
+
+                    installation_sim_customer_name.val(response['customer_name']);
+                    installation_sim_customer_email.val(response['customer_email']);
+                    installation_sim_current_sim.val(response['current_sim']);
+
+                    if (response['installation_type'] == 1) {
+
+                        installation_sim_vehicle_number_lbl.removeClass('d-none');
+                        installation_sim_vehicle_model_lbl.removeClass('d-none');
+                        installation_sim_vehicle_number.removeClass('d-none');
+                        installation_sim_vehicle_model.removeClass('d-none');
+
+                        installation_sim_vehicle_number.val(response['customer_vehicle_number']);
+                        installation_sim_vehicle_model.val(response['customer_vehicle_model']);
+                    } else {
+                        installation_sim_vehicle_number_lbl.addClass('d-none');
+                        installation_sim_vehicle_model_lbl.addClass('d-none');
+                        installation_sim_vehicle_number.addClass('d-none');
+                        installation_sim_vehicle_model.addClass('d-none');
+                    }
+
+                    sim_change_modal.modal('toggle');
+                }
+            });
+
+        }
+
+        var installation_SIM_changeTempMap = installation_new_sim.typeahead({
+            source: function(query, process) {
+                return $.get('/admin/product/sim/get/suggetions', {
+                    query: query,
+                }, function(data) {
+                    data.forEach(element => {
+                        installation_SIM_changeTempMap[element['name']] = element['id'];
+                    });
+                    return process(data);
+                });
+            }
+        });
+
+        installation_new_sim.change(function(e) {
+            var tempId = installation_SIM_changeTempMap[installation_new_sim.val()];
+            if (tempId != undefined) {
+                installation_new_sim_id.val(tempId);
+            }
+        });
+
+        // END INSTALLATION SIM CHANGE
+    </script>
 @endsection

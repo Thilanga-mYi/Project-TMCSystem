@@ -635,4 +635,6 @@
         </div>
     </div>
 
+    @include('back_end.layout.script')
+
 @endsection
