@@ -195,7 +195,7 @@
                     <div class="card-body" style="border-top: 3px solid #357a38; background-color: #c5e1a5">
                         <div class="d-flex">
                             <div class="flex-grow-1">
-                                <h3 id="installation_new_sim_total" class="mb-1 font-weight-700">LKR. 0.00</h3>
+                                <h3 id="sim_change_total" class="mb-1 font-weight-700">LKR. 0.00</h3>
                             </div>
                         </div>
                     </div>
@@ -342,6 +342,9 @@
         var installation_sim_vehicle_number_lbl = $('#installation_sim_vehicle_number_lbl')
         var installation_sim_vehicle_model_lbl = $('#installation_sim_vehicle_model_lbl')
 
+        var sim_change_total_lbl = $('#sim_change_total')
+        var installation_sim_additional_amount = $('#installation_sim_additional_amount')
+
         function installation_sim_change(id) {
 
             $.ajax({
@@ -397,10 +400,39 @@
 
         installation_new_sim.change(function(e) {
             var tempId = installation_SIM_changeTempMap[installation_new_sim.val()];
-            if (tempId != undefined) {
+            if (tempId != 0) {
                 installation_new_sim_id.val(tempId);
+
+                calculateSIMChangeAmount();
+
             }
         });
+
+
+        installation_sim_additional_amount.keyup(function(e) {
+            calculateSIMChangeAmount();
+        });
+
+        function calculateSIMChangeAmount() {
+
+            $.ajax({
+                type: "GET",
+                url: "/admin/installation/sim-change/getSIMChangeTotal",
+                data: {
+                    sim_id: isNaN(installation_new_sim_id.val()) ? 0 : installation_new_sim_id.val(),
+                    additional_amount: isNaN(installation_sim_additional_amount.val()) ? 0 :
+                        installation_sim_additional_amount.val()
+                },
+                success: function(response) {
+
+                    sim_change_total_lbl.html('');
+                    sim_change_total_lbl.html('LKR. ' + response);
+
+                }
+            });
+
+        }
+
 
         // END INSTALLATION SIM CHANGE
     </script>

@@ -31,6 +31,7 @@ class InstallationController extends Controller
         Session::forget('vehicleImages');
         Session::forget('nicImages');
         Session::forget('installation_total');
+        Session::forget('sim_change_total');
 
         $invCode = 'NWINST/' . date('smy') . '/' . str_pad((new Invoice)->getInvoiceCount() + 1, 3, '0', STR_PAD_LEFT);
         $modelList = (new ProductModel)->getAllActiveModels();
@@ -54,12 +55,12 @@ class InstallationController extends Controller
             ->where(function ($query) {
                 $query->where('products.product_type_id', '2');
             })
-            ->get(['products.id as product_id', 'products.lang1_name', 'stock_has_products.imei']);
+            ->get(['stock_has_products.id as stock_product_id', 'products.lang1_name', 'stock_has_products.imei']);
 
         foreach ($records as $product) {
 
             $data[] = [
-                'id' => $product->product_id,
+                'id' => $product->stock_product_id,
                 'name' => $product->imei . ' (' . $product->lang1_name . ')',
             ];
         }
@@ -80,12 +81,12 @@ class InstallationController extends Controller
             ->where(function ($query) {
                 $query->where('products.product_type_id', '1');
             })
-            ->get(['products.id as product_id', 'products.lang1_name', 'stock_has_products.imei']);
+            ->get(['stock_has_products.id as stock_product_id', 'products.lang1_name', 'stock_has_products.imei']);
 
         foreach ($records as $product) {
 
             $data[] = [
-                'id' => $product->product_id,
+                'id' => $product->stock_product_id,
                 'name' => $product->imei . ' (' . $product->lang1_name . ')',
             ];
         }
@@ -521,5 +522,21 @@ class InstallationController extends Controller
             'customer_vehicle_model' => $installation_obj->vehicle_modal,
             'current_sim' => stockHasProducts::find($installation_obj->sim_card_id)->imei,
         ];
+    }
+
+    public function getSIMChangeTotal(Request $request)
+    {
+
+        $total = 0;
+
+        if ($request->has('sim_id') && $request->filled('sim_id') && $request->sim_id != 0) {
+            $total += Products::find(stockHasProducts::find($request->sim_id)->product_id)->default_price;
+        }
+        if ($request->has('additional_amount') && $request->filled('additional_amount') && $request->additional_amount != 0) {
+            $total += $request->additional_amount;
+        }
+
+        Session::put('sim_change_total', $total);
+        return number_format($total, 2);
     }
 }
