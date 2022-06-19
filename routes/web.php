@@ -147,6 +147,7 @@ Route::get('/admin/invoice/PRINT', [InstallationController::class, 'printInstall
 Route::get('/admin/installation/list', [InstallationController::class, 'installationList'])->middleware('auth');
 Route::get('/admin/installation/sim-change/view-details', [InstallationController::class, 'viewSelectedInstallation'])->middleware('auth');
 Route::get('/admin/installation/sim-change/getSIMChangeTotal', [InstallationController::class, 'getSIMChangeTotal'])->middleware('auth');
+Route::get('/admin/installation/sim-change/submit', [InstallationController::class, 'submitNewSIM'])->middleware('auth');
 
 Route::get('/admin/installationList', function () {
     return view('/back_end/installation_list');

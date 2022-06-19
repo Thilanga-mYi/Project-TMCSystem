@@ -32,6 +32,7 @@ class InstallationController extends Controller
         Session::forget('nicImages');
         Session::forget('installation_total');
         Session::forget('sim_change_total');
+        Session::forget('sim_change_installation_session');
 
         $invCode = 'NWINST/' . date('smy') . '/' . str_pad((new Invoice)->getInvoiceCount() + 1, 3, '0', STR_PAD_LEFT);
         $modelList = (new ProductModel)->getAllActiveModels();
@@ -468,10 +469,6 @@ class InstallationController extends Controller
     public function printInstallationInvoice(Request $request)
     {
 
-        // $request->validate([
-        //     'id' => 'required|numeric|exists:installations,id'
-        // ]);
-
         $installation = (new Installation)
             ->where('id', $request->id)
             ->with('getCustomer')
@@ -514,6 +511,8 @@ class InstallationController extends Controller
 
         $installation_obj = (new Installation)->where('id', $request->id)->where('status', 1)->first();
 
+        Session::put('sim_change_installation_session', $installation_obj);
+
         return [
             'installation_type' => $installation_obj->installation_type,
             'customer_name' => Customer::find($installation_obj->customer_id)->name,
@@ -538,5 +537,25 @@ class InstallationController extends Controller
 
         Session::put('sim_change_total', $total);
         return number_format($total, 2);
+    }
+
+    public function submitNewSIM(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'sim_id' => 'required|numeric|exists:stock_has_products,id',
+            'additional_amount' => 'nullable|numeric',
+            'remark' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->all()]);
+        }
+
+        $sim_id = $request->sim_id;
+        $additional_amount = $request->additional_amount;
+        $remark = $request->remark;
+        $installation_obj = Session::get('sim_change_installation_session');
+
+        return $installation_obj;
     }
 }

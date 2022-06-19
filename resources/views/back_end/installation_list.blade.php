@@ -344,6 +344,7 @@
 
         var sim_change_total_lbl = $('#sim_change_total')
         var installation_sim_additional_amount = $('#installation_sim_additional_amount')
+        var installation_sim_remark = $('#installation_sim_remark')
 
         function installation_sim_change(id) {
 
@@ -378,6 +379,10 @@
                         installation_sim_vehicle_number.addClass('d-none');
                         installation_sim_vehicle_model.addClass('d-none');
                     }
+
+                    installation_new_sim_id.val("");
+                    installation_sim_additional_amount.val("");
+                    installation_sim_remark.val("");
 
                     sim_change_modal.modal('toggle');
                 }
@@ -433,6 +438,31 @@
 
         }
 
+        var rider_rating_confirm_btn = $('#rider_rating_confirm_btn');
+
+        rider_rating_confirm_btn.click(function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                type: "GET",
+                url: "/admin/installation/sim-change/submit",
+                data: {
+                    sim_id: installation_new_sim_id.val(),
+                    additional_amount: installation_sim_additional_amount.val(),
+                    remark: installation_sim_remark.val(),
+                },
+                beforeSend: function() {
+                    Notiflix.Loading.Pulse();
+                },
+                success: function(response) {
+                    Notiflix.Loading.Remove();
+
+                    console.log(response);
+
+                }
+            });
+
+        });
 
         // END INSTALLATION SIM CHANGE
     </script>
