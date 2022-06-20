@@ -203,7 +203,7 @@
 
                 <div class="card-footer p-0 m-0">
                     <div class="d-flex justify-content-end">
-                        <button id="rider_rating_confirm_btn" class="btn btn-success text-white w-100 rounded-0">
+                        <button id="sim_change_submit_btn" class="btn btn-success text-white w-100 rounded-0">
                             <i class="fa fa-long-arrow-right me-1" aria-hidden="true"></i> Submit
                         </button>
                     </div>
@@ -438,31 +438,55 @@
 
         }
 
-        var rider_rating_confirm_btn = $('#rider_rating_confirm_btn');
+        var sim_change_submit_btn = $('#sim_change_submit_btn');
 
-        rider_rating_confirm_btn.click(function(e) {
+        sim_change_submit_btn.click(function(e) {
             e.preventDefault();
 
-            $.ajax({
-                type: "GET",
-                url: "/admin/installation/sim-change/submit",
-                data: {
-                    sim_id: installation_new_sim_id.val(),
-                    additional_amount: installation_sim_additional_amount.val(),
-                    remark: installation_sim_remark.val(),
+
+            Notiflix.Confirm.Show('SIM Change Confirmation', 'Please confirm to change SIM details', 'Confirm',
+                'Ignore',
+                function() {
+
+                    $.ajax({
+                        type: "GET",
+                        url: "/admin/installation/sim-change/submit",
+                        data: {
+                            sim_id: installation_new_sim_id.val(),
+                            additional_amount: installation_sim_additional_amount.val(),
+                            remark: installation_sim_remark.val(),
+                        },
+                        beforeSend: function() {
+                            Notiflix.Loading.Pulse();
+                        },
+                        success: function(response) {
+                            Notiflix.Loading.Remove();
+
+                            console.log(response);
+
+                            if ($.isEmptyObject(response.error)) {
+
+                                if (response['type'] == 'success') {
+
+                                    Notiflix.Notify.Success(response['des']);
+                                    installation_datatable_list.ajax.reload(null, false);
+
+                                } else {
+                                    Notiflix.Notify.Failure(response['des']);
+                                }
+
+                            } else {
+                                Notiflix.Loading.Remove();
+                                $.each(response.error, function(key, value) {
+                                    Notiflix.Notify.Failure(value);
+                                });
+                            }
+                        }
+                    });
                 },
-                beforeSend: function() {
-                    Notiflix.Loading.Pulse();
-                },
-                success: function(response) {
-                    Notiflix.Loading.Remove();
-
-                    console.log(response);
-
-                }
-            });
-
+                function() {});
         });
+
 
         // END INSTALLATION SIM CHANGE
     </script>

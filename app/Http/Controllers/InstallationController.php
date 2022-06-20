@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\Installation;
+use App\Models\InstallationChangedSim;
 use App\Models\InstallationHasFeatures;
 use App\Models\Invoice;
 use App\Models\InvoiceHasCustomer;
@@ -556,6 +557,35 @@ class InstallationController extends Controller
         $remark = $request->remark;
         $installation_obj = Session::get('sim_change_installation_session');
 
-        return $installation_obj;
+        $installationChnagedSIM_obj = (new InstallationChangedSim);
+
+        foreach ($installationChnagedSIM_obj->where('installation_id', $installation_obj->id)->get() as $key => $value) {
+            $installationChnagedSIM_obj->where('id', $value->id)->update(['status' => 2]);
+        }
+
+        $nstallation_change_sim_data = [
+            'customer_id' => $installation_obj->customer_id,
+            'installation_id' => $installation_obj->id,
+            'changed_sim_id' => $installation_obj->sim_card_id,
+            'new_sim_id' => $sim_id,
+            'sim_amount' => stockHasProducts::find($sim_id)->unit_price,
+            'additional_amount' => $additional_amount,
+            'remark' => $remark,
+            'total_amount' => stockHasProducts::find($sim_id)->unit_price + $additional_amount,
+            'status' => 1,
+        ];
+
+        $installationChnagedSIM_obj->create($nstallation_change_sim_data);
+
+        (new Installation)->edit('id', $installation_obj->id, ['sim_card_id' => $sim_id]);
+        (new stockHasProducts)->edit('id', $sim_id, ['status' => 2]);
+
+        return response()->json([
+            'code' => 1,
+            'type' => 'success',
+            'des' => 'Successfully Changed SIM on ' . Customer::find($installation_obj->customer_id)->name,
+            'refresh_status' => 1,
+            'feild_reset_status' => 1,
+        ]);
     }
 }
