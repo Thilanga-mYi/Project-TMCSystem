@@ -181,7 +181,14 @@
                 </tr>
                 <tr>
                     <td style="width: 15%">SIM Number</td>
-                    <td colspan="3">{{ $installation_data['getSIM']['imei'] }}</td>
+                    <td colspan="3">
+                        @if ($installation_data['sim_card_id'] != 0)
+                            {{ $installation_data['getSIM']['imei'] }}
+                        @else
+                            -
+                        @endif
+
+                    </td>
                 </tr>
                 <tr>
                     <td style="width: 15%">IMEI or ID</td>

@@ -15,6 +15,7 @@ class InstallationChangedSim extends Model
         'changed_sim_id',
         'new_sim_id',
         'sim_amount',
+        'installation_amount',
         'additional_amount',
         'remark',
         'total_amount',

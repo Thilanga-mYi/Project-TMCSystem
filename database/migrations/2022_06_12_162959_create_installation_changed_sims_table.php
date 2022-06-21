@@ -20,6 +20,7 @@ class CreateInstallationChangedSimsTable extends Migration
             $table->integer('changed_sim_id');
             $table->integer('new_sim_id');
             $table->double('sim_amount')->default(0);
+            $table->double('installation_amount')->default(0);
             $table->double('additional_amount')->default(0);
             $table->string('remark')->nullable();
             $table->double('total_amount')->default(0);

@@ -143,11 +143,15 @@
                                 </div>
                             </div>
 
+                            <div class="col-md-12">
+                                <hr style="border-top: 1px dashed #9e9e9e;">
+                            </div>
+
                             <div class="col-12">
                                 <div class="form-group mb-3">
 
                                     <label class="form-label small_font" for="new_invoice_billing_to">
-                                        New SIM Card Number
+                                        New SIM Card Number <span class="text-danger">*</span>
                                     </label>
 
                                     <div class="input-group">
@@ -160,7 +164,13 @@
                             </div>
 
                             <div class="col-md-12">
-                                <hr style="border-top: 1px dashed #9e9e9e;">
+                                <div class="form-group mb-3">
+                                    <label class="form-label small_font" for="installation_sim_additional_amount">
+                                        SIM Changed Amount <span class="text-danger">*</span>
+                                    </label>
+                                    <input id="installation_sim_changed_amount" name="installation_sim_changed_amount"
+                                        type="number" class="form-control" />
+                                </div>
                             </div>
 
                             <div class="col-md-12">
@@ -343,6 +353,7 @@
         var installation_sim_vehicle_model_lbl = $('#installation_sim_vehicle_model_lbl')
 
         var sim_change_total_lbl = $('#sim_change_total')
+        var installation_sim_changed_amount = $('#installation_sim_changed_amount')
         var installation_sim_additional_amount = $('#installation_sim_additional_amount')
         var installation_sim_remark = $('#installation_sim_remark')
 
@@ -418,6 +429,10 @@
             calculateSIMChangeAmount();
         });
 
+        installation_sim_changed_amount.keyup(function(e) {
+            calculateSIMChangeAmount();
+        });
+
         function calculateSIMChangeAmount() {
 
             $.ajax({
@@ -425,6 +440,7 @@
                 url: "/admin/installation/sim-change/getSIMChangeTotal",
                 data: {
                     sim_id: isNaN(installation_new_sim_id.val()) ? 0 : installation_new_sim_id.val(),
+                    installation_charge: installation_sim_changed_amount.val(),
                     additional_amount: isNaN(installation_sim_additional_amount.val()) ? 0 :
                         installation_sim_additional_amount.val()
                 },
@@ -443,7 +459,6 @@
         sim_change_submit_btn.click(function(e) {
             e.preventDefault();
 
-
             Notiflix.Confirm.Show('SIM Change Confirmation', 'Please confirm to change SIM details', 'Confirm',
                 'Ignore',
                 function() {
@@ -453,6 +468,7 @@
                         url: "/admin/installation/sim-change/submit",
                         data: {
                             sim_id: installation_new_sim_id.val(),
+                            installation_charge: installation_sim_changed_amount.val(),
                             additional_amount: installation_sim_additional_amount.val(),
                             remark: installation_sim_remark.val(),
                         },
@@ -462,15 +478,13 @@
                         success: function(response) {
                             Notiflix.Loading.Remove();
 
-                            console.log(response);
-
                             if ($.isEmptyObject(response.error)) {
 
-                                if (response['type'] == 'success') {
+                                sim_change_modal.modal('hide');
 
+                                if (response['type'] == 'success') {
                                     Notiflix.Notify.Success(response['des']);
                                     installation_datatable_list.ajax.reload(null, false);
-
                                 } else {
                                     Notiflix.Notify.Failure(response['des']);
                                 }
@@ -486,7 +500,6 @@
                 },
                 function() {});
         });
-
 
         // END INSTALLATION SIM CHANGE
     </script>

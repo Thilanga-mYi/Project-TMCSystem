@@ -195,8 +195,9 @@ class InstallationController extends Controller
             'vehicle_plate_number' => 'required_if:installation_type,1',
             'vehicle_milage' => 'required_if:installation_type,1',
             'vehicle_model' => 'required_if:installation_type,1',
-            'sim_card_id' => 'required|numeric',
+            'sim_card_id' => 'required_if:installation_type,1',
             'device_id' => 'required|numeric',
+            'warranty_id' => 'required|numeric|min:1',
         ]);
 
         if ($validator->fails()) {
@@ -223,7 +224,13 @@ class InstallationController extends Controller
         $vehicle_model = $request->vehicle_model;
         $vehicle_engine_h = $request->vehicle_engine_h;
         $vehicle_engine_m = $request->vehicle_engine_m;
-        $sim_card_id = $request->sim_card_id;
+
+        if ($request->has('sim_card_id') && $request->filled('sim_card_id')) {
+            $sim_card_id = $request->sim_card_id;
+        } else {
+            $sim_card_id = 0;
+        }
+
         $device_id = $request->device_id;
         $model_id = Products::find(stockHasProducts::find($request->device_id)->product_id)->model_id;
         $annual_fee = $request->annual_fee;
@@ -303,7 +310,13 @@ class InstallationController extends Controller
         ];
 
         $invoiceObj = (new Invoice)->add($invoice_data);
-        $sim_price = Products::find(stockHasProducts::find($sim_card_id)->product_id)->default_price;
+
+        if ($request->has('sim_card_id') && $request->filled('sim_card_id')) {
+            $sim_price = Products::find(stockHasProducts::find($sim_card_id)->product_id)->default_price;
+        } else {
+            $sim_price = 0;
+        }
+
         $device_price = Products::find(stockHasProducts::find($device_id)->product_id)->default_price;
 
         $invoice_has_customer = [
@@ -340,10 +353,13 @@ class InstallationController extends Controller
         ];
 
         (new InvoiceHasCustomer)->add($invoice_has_customer);
-        (new InvoiceHasProducts)->add($invoice_has_sim_data);
         (new InvoiceHasProducts)->add($invoice_has_product_data);
 
-        (new stockHasProducts)->edit('id', $sim_card_id, ['status' => 2]);
+        if ($request->has('sim_card_id') && $request->filled('sim_card_id')) {
+            (new InvoiceHasProducts)->add($invoice_has_sim_data);
+            (new stockHasProducts)->edit('id', $sim_card_id, ['status' => 2]);
+        }
+
         (new stockHasProducts)->edit('id', $device_id, ['status' => 2]);
 
         Session::forget('vehicleImages');
@@ -456,7 +472,7 @@ class InstallationController extends Controller
                 ++$key,
                 $value->invoice_code,
                 $value['getCustomer']->name,
-                $value['getSIM']->imei,
+                $value->sim_card_id != 0 ? $value['getSIM']->imei : 'Not Inserted a SIM',
                 $value['getDevice']->imei,
                 $installationType,
                 $orderStatus,
@@ -520,7 +536,7 @@ class InstallationController extends Controller
             'customer_email' => Customer::find($installation_obj->customer_id)->email,
             'customer_vehicle_number' => $installation_obj->vehicle_plate_number,
             'customer_vehicle_model' => $installation_obj->vehicle_modal,
-            'current_sim' => stockHasProducts::find($installation_obj->sim_card_id)->imei,
+            'current_sim' => $installation_obj->sim_card_id != 0 ? stockHasProducts::find($installation_obj->sim_card_id)->imei : 'Not Inseretd a SIM Card',
         ];
     }
 
@@ -531,6 +547,9 @@ class InstallationController extends Controller
 
         if ($request->has('sim_id') && $request->filled('sim_id') && $request->sim_id != 0) {
             $total += Products::find(stockHasProducts::find($request->sim_id)->product_id)->default_price;
+        }
+        if ($request->has('installation_charge') && $request->filled('installation_charge') && $request->installation_charge != 0) {
+            $total += $request->installation_charge;
         }
         if ($request->has('additional_amount') && $request->filled('additional_amount') && $request->additional_amount != 0) {
             $total += $request->additional_amount;
@@ -544,6 +563,7 @@ class InstallationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'sim_id' => 'required|numeric|exists:stock_has_products,id',
+            'installation_charge' => 'required|numeric',
             'additional_amount' => 'nullable|numeric',
             'remark' => 'nullable|string',
         ]);
@@ -553,6 +573,7 @@ class InstallationController extends Controller
         }
 
         $sim_id = $request->sim_id;
+        $installation_charge = $request->installation_charge;
         $additional_amount = $request->additional_amount;
         $remark = $request->remark;
         $installation_obj = Session::get('sim_change_installation_session');
@@ -569,9 +590,10 @@ class InstallationController extends Controller
             'changed_sim_id' => $installation_obj->sim_card_id,
             'new_sim_id' => $sim_id,
             'sim_amount' => stockHasProducts::find($sim_id)->unit_price,
+            'installation_amount' => $installation_charge,
             'additional_amount' => $additional_amount,
             'remark' => $remark,
-            'total_amount' => stockHasProducts::find($sim_id)->unit_price + $additional_amount,
+            'total_amount' => stockHasProducts::find($sim_id)->unit_price + $additional_amount + $installation_charge,
             'status' => 1,
         ];
 
